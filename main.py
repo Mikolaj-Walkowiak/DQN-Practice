@@ -9,7 +9,7 @@ stany = env.observation_space.n
 
 qtable = np.zeros((stany,akcje))
 print(qtable)
-
+# Left | Down | Right | Up
 ilEpizodow = 50000
 learningRate = 0.8
 maxSteps = 99
@@ -32,6 +32,11 @@ for episode in range(ilEpizodow):   #cala gra (informacje o niej)
         losowanko = random.uniform(0, 1)
         if losowanko > epsilon:
             akcja = np.argmax(qtable[s1, :])
+            if step == 1 and episode == 41370:
+                print(s1)
+                print(qtable)
+                print((qtable[s1, :]))
+                print(akcja)
 
         else:
             akcja = env.action_space.sample()
@@ -41,16 +46,16 @@ for episode in range(ilEpizodow):   #cala gra (informacje o niej)
             (nagroda + gamma * np.max(qtable[s2, :]) - qtable[s1, akcja])
         iloscNagrod += nagroda
         s1 = s2
-
         if done:
             break
 
     epsilon = minEpsilon + (maxEpsilon - minEpsilon) * np.exp(-decay_rate * (episode + 1))
     rewards.append(iloscNagrod)
 
-   """print("epizod: " + str(episode) + " | epsilon: " + str(epsilon) + " | nagroda: " + str(nagroda))
+    #print("epizod: " + str(episode) + " | epsilon: " + str(epsilon) + " | nagroda: " + str(nagroda))
+
     if (episode % 10000) == 0:
-        print("H A L K O")"""
+        print("H A L K O")
 
 print("Score over time: " + str(sum(rewards)/ilEpizodow))
 print(qtable)
